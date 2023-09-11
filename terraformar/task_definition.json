@@ -1,0 +1,31 @@
+[
+    {
+        "name": "denzelrr-webservice",
+        "image": "${CONTAINER_IMAGE}", 
+        "cpu": 256,
+        "memory": 256,
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "denzelrr-webservice",
+            "awslogs-create-group": "true",
+            "awslogs-region": "us-west-2",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "links": [],
+        "portMappings": [
+            { 
+                "hostPort": 80,
+                "containerPort": 80,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [],
+        "mountPoints": [],
+        "volumesFrom": []
+    }
+  ]
