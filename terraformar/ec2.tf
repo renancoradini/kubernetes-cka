@@ -1,5 +1,25 @@
-# 1. EC2 Instance for teste and SSH
-resource "aws_instance" "ec2_kubernetes" {
+# 1. EC2 Instance for Kubernetes Cluster
+resource "aws_instance" "ec2_kubernetes_master" {
+  count         = 1
+  ami           = var.image_ecs_id
+  instance_type = var.instance_type
+
+  subnet_id                   = module.vpc.public_subnets[0]
+  vpc_security_group_ids      = [aws_security_group.public.id]
+  associate_public_ip_address = "true"
+
+
+  # 2. Key Name
+  # Specify the key name and it should match with key_name from the resource "aws_key_pair"
+  key_name = aws_key_pair.generated_key.key_name
+  tags = {
+    Name = "Kubernetes Master Controller"
+  }
+}
+
+
+# 2. EC2 Instance for Kubernetes Workers
+resource "aws_instance" "ec2_kubernetes_workers" {
   count         = var.count_kub_instances
   ami           = var.image_ecs_id
   instance_type = var.instance_type
@@ -13,7 +33,7 @@ resource "aws_instance" "ec2_kubernetes" {
   # Specify the key name and it should match with key_name from the resource "aws_key_pair"
   key_name = aws_key_pair.generated_key.key_name
   tags = {
-    Name = "Kubernetes Cluster"
+    Name = "Kubernetes Workers"
   }
 }
 

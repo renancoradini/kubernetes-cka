@@ -1,10 +1,20 @@
 # inventory.tftpl
 
-[aws_ec2]
+[aws_ec2_master]
+%{ for addr in ip_addrsm ~}
+${addr}
+%{ endfor ~}
+
+[aws_ec2_master:vars]
+ansible_ssh_user=ec2-user
+ansible_ssh_private_key_file=${ssh_keyfile}
+
+
+[aws_ec2_workers]
 %{ for addr in ip_addrs ~}
 ${addr}
 %{ endfor ~}
 
-[aws_ec2:vars]
+[aws_ec2_workers:vars]
 ansible_ssh_user=ec2-user
 ansible_ssh_private_key_file=${ssh_keyfile}
