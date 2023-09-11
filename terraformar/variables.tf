@@ -115,3 +115,9 @@ variable "passwordDB" {
   type        = string
   sensitive   = true
 }
+
+variable "count_kub_instances" {
+  description = "Numero de instancias kubernetes"
+  type        = number
+  default     = 3
+}

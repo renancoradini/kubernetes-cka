@@ -1,3 +1,3 @@
 output "name_database" {
-  value = aws_db_instance.name1db.endpoint
+  value = aws_db_instance.db.endpoint
 }

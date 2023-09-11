@@ -9,11 +9,11 @@ resource "aws_db_subnet_group" "default" {
 }
 
 
-resource "aws_db_instance" "name1db" {
+resource "aws_db_instance" "db" {
   allocated_storage    = 5
   storage_type         = "gp2"
   instance_class       = "db.t3.micro"
-  identifier           = "name1db"
+  identifier           = "db"
   engine               = "postgres"
   engine_version       = "14"
   parameter_group_name = "default.postgres14"

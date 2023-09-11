@@ -1,6 +1,6 @@
 # 1. EC2 Instance for teste and SSH
-resource "aws_instance" "ec2_ssh" {
-
+resource "aws_instance" "ec2_kubernetes" {
+  count         = var.count_kub_instances
   ami           = var.image_ecs_id
   instance_type = var.instance_type
 
@@ -13,7 +13,7 @@ resource "aws_instance" "ec2_ssh" {
   # Specify the key name and it should match with key_name from the resource "aws_key_pair"
   key_name = aws_key_pair.generated_key.key_name
   tags = {
-    Name = "Terraform - using tls_private_key module"
+    Name = "Kubernetes Cluster"
   }
 }
 
