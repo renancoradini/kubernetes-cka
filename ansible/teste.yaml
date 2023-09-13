@@ -1,0 +1,40 @@
+
+  #tasks:
+  - hosts: aws_ec2_master
+    gather_facts: no
+    tasks:
+      - set_fact:
+          indexed_hostname: "{{ 'k8s-master{0:02d}'.format(play_hosts.index(inventory_hostname)+1) }}"
+
+  - hosts: aws_ec2_master
+    gather_facts: no
+    tasks:
+    - debug:
+       msg: "{{ hostvars[item].indexed_hostname }}"
+      with_items: "{{ groups['aws_ec2_master'] }}"
+
+    - name: change hostname
+      shell: sudo hostnamectl set-hostname "{{ hostvars[item].indexed_hostname }}"
+      with_items: "{{ groups['aws_ec2_master'] }}"
+      run_once: true
+
+
+  - hosts: aws_ec2_workers
+    gather_facts: no
+    tasks:
+      - set_fact:
+          indexed_hostname: "{{ 'k8s-workers{0:02d}'.format(play_hosts.index(inventory_hostname)+1) }}"
+
+  - hosts: aws_ec2_workers
+    gather_facts: no
+    tasks:
+    - name: change hostname
+      run_once: true
+      shell: sudo hostnamectl set-hostname "{{ hostvars[item].indexed_hostname }}"
+      with_items: "{{ groups['aws_ec2_workers'] }}"
+      
+
+    - debug:
+       msg: "{{ hostvars[item].indexed_hostname }}"
+      with_items: "{{ groups['aws_ec2_workers'] }}"
+      run_once: true

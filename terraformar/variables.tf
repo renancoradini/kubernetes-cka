@@ -85,6 +85,13 @@ variable "image_ecs_id" {
 
 }
 
+variable "image_kubernetes_id" {
+  default = "ami-0c65adc9a5c1b5d7c"
+
+}
+
+
+
 
 variable "key_name" {
   type    = string

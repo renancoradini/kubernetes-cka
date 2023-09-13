@@ -1,0 +1,12 @@
+- hosts: aws_ec2_master
+  gather_facts: no
+  tasks:
+    - set_fact:
+        indexed_hostname: "{{ 'k8s-worker{0:02d}'.format(play_hosts.index(inventory_hostname)+1) }}"
+
+- hosts: aws_ec2_master
+  gather_facts: no
+  tasks:
+    - debug:
+        msg: "{{ hostvars[item].indexed_hostname }}"
+      with_items: "{{ groups['aws_ec2_master'] }}"

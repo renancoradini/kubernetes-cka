@@ -1,11 +1,11 @@
 # 1. EC2 Instance for Kubernetes Cluster
 resource "aws_instance" "ec2_kubernetes_master" {
   count         = 1
-  ami           = var.image_ecs_id
+  ami           = var.image_kubernetes_id
   instance_type = var.instance_type
 
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [aws_security_group.public.id]
+  vpc_security_group_ids      = [aws_security_group.public.id, aws_security_group.ec2_ecs_instance.id]
   associate_public_ip_address = "true"
 
 
@@ -21,11 +21,11 @@ resource "aws_instance" "ec2_kubernetes_master" {
 # 2. EC2 Instance for Kubernetes Workers
 resource "aws_instance" "ec2_kubernetes_workers" {
   count         = var.count_kub_instances
-  ami           = var.image_ecs_id
+  ami           = var.image_kubernetes_id
   instance_type = var.instance_type
 
   subnet_id                   = module.vpc.public_subnets[0]
-  vpc_security_group_ids      = [aws_security_group.public.id]
+  vpc_security_group_ids      = [aws_security_group.public.id, aws_security_group.ec2_ecs_instance.id]
   associate_public_ip_address = "true"
 
 
@@ -40,9 +40,9 @@ resource "aws_instance" "ec2_kubernetes_workers" {
 ##Auto Scale Group
 
 resource "aws_autoscaling_group" "tf2" {
-  desired_capacity = 2 #set to what you like; must be same number as min
-  max_size         = 4 #set to what you like
-  min_size         = 2 #set to what you like; must be same as desired capacity
+  desired_capacity = 0 #set to what you like; must be same number as min
+  max_size         = 0 #set to what you like
+  min_size         = 0 #set to what you like; must be same as desired capacity
   vpc_zone_identifier = [
   module.vpc.public_subnets[0], module.vpc.public_subnets[1], module.vpc.public_subnets[2]] #two subnets
 
