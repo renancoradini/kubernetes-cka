@@ -128,12 +128,14 @@
   become_user: root
   gather_facts: yes
   tasks:
-    - name: set fact
+    - name: Extract var from aws_ec2_master group
       set_fact:
-        string_to_echo2: "{{groups['aws_ec2_master'] | map('extract',hostvars,'string_to_echo') | list}}"
-    - name: debug
+        map_var: "{{groups['aws_ec2_master'] | map('extract',hostvars,'string_to_echo') | list }}"
+    - name: Convert map to My String
+      set_fact:
+        my_string: "{{ map_var | join(',') }}"
+    - name: verifying string output
       debug: 
-        msg: "{{string_to_echo2}}"
+        msg: "{{my_string }}"
     - name: register workers Nodes
-      shell: |
-             "{{string_to_echo2 | replace([]\"'\",'')}}"
+      command: "{{my_string}}"
