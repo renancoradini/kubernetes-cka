@@ -7,8 +7,6 @@ resource "aws_instance" "ec2_kubernetes_master" {
   subnet_id                   = module.vpc.public_subnets[0]
   vpc_security_group_ids      = [aws_security_group.public.id, aws_security_group.ec2_ecs_instance.id]
   associate_public_ip_address = "true"
-
-
   # 2. Key Name
   # Specify the key name and it should match with key_name from the resource "aws_key_pair"
   key_name = aws_key_pair.generated_key.key_name
@@ -27,8 +25,6 @@ resource "aws_instance" "ec2_kubernetes_workers" {
   subnet_id                   = module.vpc.public_subnets[0]
   vpc_security_group_ids      = [aws_security_group.public.id, aws_security_group.ec2_ecs_instance.id]
   associate_public_ip_address = "true"
-
-
   # 2. Key Name
   # Specify the key name and it should match with key_name from the resource "aws_key_pair"
   key_name = aws_key_pair.generated_key.key_name
@@ -36,6 +32,16 @@ resource "aws_instance" "ec2_kubernetes_workers" {
     Name = "Kubernetes Workers"
   }
 }
+
+resource "terraform_data" "data-local-ansible" {
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command     = "ansible-playbook kubernetes_playbook_v3.yaml"
+
+  }
+  depends_on = [aws_instance.ec2_kubernetes_workers, local_file.ansible_inventory]
+}
+
 
 ##Auto Scale Group
 
