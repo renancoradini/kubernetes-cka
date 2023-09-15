@@ -1,39 +1,9 @@
-- name: host file update - Local DNS setup across all the servers
-  hosts: 
-  - aws_ec2_workers
-  - aws_ec2_master
-
-  gather_facts: yes
-  tasks:
-
-  - name: 1st Wait for system to become reachable
-    wait_for_connection:
-      delay: 120
-      timeout: 900
-  - name: Update the /etc/hosts file with node name
-    tags: etchostsupdate
-    become: yes
-    become_user: root
-    lineinfile:
-      path: "/etc/hosts"
-      regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
-      line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
-      state: present
-      backup: yes
-    register: etchostsupdate
-    when: ansible_hostname != "{{ item }}" or ansible_hostname == "{{ item }}"
-    with_items: 
-      - "{{groups['aws_ec2_workers']}}"
-      - "{{groups['aws_ec2_master']}}"
-
-
-
 - hosts: 
    - aws_ec2_master
    - aws_ec2_workers
   become: yes
- # become_method: sudo
- # become_user: root
+  become_method: sudo
+  become_user: root
   gather_facts: yes
 
   tasks:
@@ -109,8 +79,8 @@
 
 - hosts: "aws_ec2_master"
   become: yes
- # become_method: sudo
-  #become_user: root
+  become_method: sudo
+  become_user: root
   gather_facts: yes
   tasks:
      - name: On the control plane set up kubectl access
@@ -127,37 +97,3 @@
                kubeadm token create --print-join-command
                sudo kubeadm join ...
                kubectl get nodes
-
-- hosts: aws_ec2_master
-  become: yes
- # become_method: sudo
- # become_user: root
-  gather_facts: yes
-  tasks:
-    - name: Getting the joing command and storing into VAR
-      command: "sudo kubeadm token create --print-join-command"
-      register: command_output
-    - set_fact:
-       string_to_echo: "{{ command_output.stdout }}"
-    
-    - name: Verifying var string output
-      debug: 
-        msg: "{{string_to_echo}}"
-
-- hosts: aws_ec2_workers
-  become: yes
- # become_method: sudo
- # become_user: root
-  gather_facts: yes
-  tasks:
-    - name: Importing and Extracting kubernetes output join request (var) from aws_ec2_master group
-      set_fact:
-        map_var: "{{groups['aws_ec2_master'] | map('extract',hostvars,'string_to_echo') | list }}"
-    - name: Converting map to My String var
-      set_fact:
-        my_string: "{{ map_var | join(',') }}"
-    - name: verifying string output
-      debug: 
-        msg: "{{my_string }}"
-    - name: Apply command to register workers Nodes into Kubernetes CLuster
-      command: "{{my_string}}"

@@ -36,8 +36,7 @@ resource "aws_instance" "ec2_kubernetes_workers" {
 resource "terraform_data" "data-local-ansible" {
   provisioner "local-exec" {
     working_dir = "../ansible"
-    command     = "ansible-playbook kubernetes_playbook_v3.yaml"
-
+    command     = "ansible-playbook kubernetes_playbook.yaml"
   }
   depends_on = [aws_instance.ec2_kubernetes_workers, local_file.ansible_inventory]
 }
