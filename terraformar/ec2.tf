@@ -33,12 +33,21 @@ resource "aws_instance" "ec2_kubernetes_workers" {
   }
 }
 
-resource "terraform_data" "data-local-ansible" {
+resource "null_resource" "ansible-check-conn-ec2s" {
+  provisioner "remote-exec" {
+    connection {
+      host        = aws_instance.ec2_kubernetes_workers[2].public_ip
+      user        = "ubuntu"
+      private_key = file(local_sensitive_file.private_key.filename)
+
+    }
+    inline = ["echo 'Estou conectaaaaaaaado!'"]
+  }
   provisioner "local-exec" {
     working_dir = "../ansible"
-    command     = "ansible-playbook kubernetes_playbook.yaml"
+    command     = "ansible-playbook playbooks/kubernetes_playbook.yaml"
   }
-  depends_on = [aws_instance.ec2_kubernetes_workers, local_file.ansible_inventory]
+  depends_on = [aws_key_pair.generated_key]
 }
 
 
