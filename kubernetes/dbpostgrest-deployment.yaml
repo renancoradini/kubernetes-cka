@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbpostgrest-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dbpostgrest
+  template:
+    metadata:
+      labels:
+        app: dbpostgrest
+    spec:
+      containers:
+      - name: dbpostgrest
+        image: 595438810944.dkr.ecr.us-west-2.amazonaws.com/dbpost:latest
+        resources:
+          limits:
+            memory: "384Mi"
+            cpu: "500m"
+
+        ports:
+        - containerPort: 5432
+        imagePullSecrets:
+        - name: regcred
