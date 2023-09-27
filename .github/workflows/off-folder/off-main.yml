@@ -1,0 +1,67 @@
+name: CI-CD
+on: 
+  push:
+    branches: ["main22"]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3.6.0
+    
+    - name: Autentication of docker hub
+      uses: docker/login-action@v2.2.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_PWD }}
+    
+    - name: Construction of Docker's image
+      uses: docker/build-push-action@v4.1.1
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: |
+          renancoradini/denzelapp01:${{github.run_number}}
+          renancoradini/denzelapp01:latest
+
+#    - name: Docker ECR
+#      uses: appleboy/docker-ecr-action@v0.0.3
+#      with:
+#        access_key: ${{ secrets.AWS_ACCESS }}
+#        secret_key: ${{ secrets.AWS_SECRET }}
+#        region: us-west-2
+#        repo: ecrrepo2
+#        tags: latest
+#        dockerfile: Dockerfile
+
+    - name: GitHub Docker Action
+  # You may pin to the exact commit or the version.
+  # uses: matootie/github-docker@c1290d4f67c6fc0cdf84b2924d6dccf658129b3e
+      uses: matootie/github-docker@v3.1.0
+      with:
+        # GitHub Repository Token to log in using.
+        accessToken: ${{ secrets.GHTOKEN }}
+        # The desired name for the image. Defaults to current repository name.
+        imageName: renancoradini/denzelapp01
+        tag: latest
+        # Any additional build arguments to use when building the image, separated by newline.
+        #buildArgs: 
+        context: .
+        # The repository to push the image to. Defaults to the current repository. Must be specified in format user/repo.
+        repository: renancoradini/denzelapp01
+
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker ECR
+        uses: appleboy/docker-ecr-action@v0.0.3
+        with:
+          access_key: ${{ secrets.AWS_ACCESS }}
+          secret_key: ${{ secrets.AWS_SECRET }}
+          region: us-west-2
+          repo: ecrrepo2
+          tags: latest
+          dockerfile: Dockerfile

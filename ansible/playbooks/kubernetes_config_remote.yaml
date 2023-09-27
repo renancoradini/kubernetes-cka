@@ -1,0 +1,49 @@
+- name: Update remote config file
+  hosts: 
+  - aws_ec2_master
+  gather_facts: true
+  tasks:
+  - name: Copy file 1
+    ansible.builtin.copy:
+      src: /home/renancoradini/gitprojetos/kubernetes-cka/kubernetes/appteste-deployment.yaml
+      dest: /home/ubuntu/appteste-deployment.yaml
+     # remote_src: true
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+
+  - name: Copy file 2
+    ansible.builtin.copy:
+      src: /home/renancoradini/gitprojetos/kubernetes-cka/kubernetes/appteste-service.yaml
+      dest: /home/ubuntu/appteste-service.yaml
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+
+  - name: Copy file 3
+    ansible.builtin.copy:
+      src: /home/renancoradini/gitprojetos/kubernetes-cka/kubernetes/dbpostgrest-deployment.yaml
+      dest: /home/ubuntu/dbpostgrest-deployment.yaml
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+
+  - name: Copy file 4
+    ansible.builtin.copy:
+      src: /home/renancoradini/gitprojetos/kubernetes-cka/kubernetes/dbpostgrest-service.yaml
+      dest: /home/ubuntu/dbpostgrest-service.yaml
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+
+- hosts: 
+   - aws_ec2_master
+  become: true
+  gather_facts: true
+  tasks:
+     - name: Apply new settings
+       shell: |
+              kubectl apply -f /home/ubuntu/appteste-deployment.yaml
+              kubectl apply -f /home/ubuntu/appteste-service.yaml
+              kubectl apply -f /home/ubuntu/dbpostgrest-deployment.yaml
+              kubectl apply -f /home/ubuntu/dbpostgrest-service.yaml

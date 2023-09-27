@@ -1,0 +1,38 @@
+name: aws-service-ecs-update
+
+on:
+  workflow_call:
+
+env:
+  AWS_REGION: us-west-2                  # set this to your preferred AWS region, e.g. us-west-1
+ # ECR_REPOSITORY: demo-deploy          # set this to your Amazon ECR repository name
+  ECS_SERVICE: denzelrr-webservice-service-webservice               # set this to your Amazon ECS service name
+  ECS_CLUSTER: ecs-denzelrr-cluster                 # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: .github/workflows/job-aws-service-ecs-update.yml      # set this to the path to your Amazon ECS task definition                                           # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: denzelrr-webservice           # set this to the name of the container in the
+                                                # containerDefinitions section of your task definition
+
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "Configure AWS Credentials"
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+            # AWS Region, e.g. us-east-2
+            aws-region: us-west-2
+            # The Amazon Resource Name (ARN) of the role to assume. Use the provided credentials to assume an IAM role and configure the Actions environment with the assumed role credentials rather than with the provided credentials.
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            # AWS Secret Access Key. Required if aws-access-key-id is provided.
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+            # AWS Session Token.
+      
+      - name: Force deployment
+        run: |
+          aws ecs update-service --cluster ecs-denzelrr-cluster --service denzelrr-webservice-service-webservice --force-new-deployment

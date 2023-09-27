@@ -45,6 +45,14 @@ resource "aws_iam_role_policy_attachment" "ecs_agent2" {
   depends_on = [aws_iam_role.ecs_agent]
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_agent3" {
+  role       = aws_iam_role.ecs_agent.name
+  policy_arn = "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
+  depends_on = [aws_iam_role.ecs_agent]
+}
+
+
+
 resource "aws_iam_role_policy_attachment" "Cloudwatch_FullAccess" {
   role       = aws_iam_role.ecs_agent.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"

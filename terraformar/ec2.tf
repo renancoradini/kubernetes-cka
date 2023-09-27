@@ -33,6 +33,20 @@ resource "aws_instance" "ec2_kubernetes_workers" {
   }
 }
 
+resource "aws_lb_target_group_attachment" "kubernete_target_group" {
+
+  # covert a list of instance objects to a map with instance ID as the key, and an instance
+  # object as the value.
+  for_each = {
+    for k, v in aws_instance.ec2_kubernetes_workers :
+    v.id => v
+  }
+  
+  target_group_arn = aws_alb_target_group.alb_public_webservice_target_group.arn
+  target_id        = each.value.id
+  port             = 80
+}
+
 resource "null_resource" "ansible-check-conn-ec2s" {
   provisioner "remote-exec" {
     connection {
@@ -45,11 +59,10 @@ resource "null_resource" "ansible-check-conn-ec2s" {
   }
   provisioner "local-exec" {
     working_dir = "../ansible"
-    command     = "ansible-playbook playbooks/kubernetes_playbook.yaml"
+    command     = "ansible-playbook -i ../terraformar/inventory.ini playbooks/kubernetes_playbook.yaml"
   }
   depends_on = [aws_key_pair.generated_key]
 }
-
 
 ##Auto Scale Group
 
