@@ -14,11 +14,11 @@ jobs:
       uses: docker/build-push-action@v4.1.1
       with:
         context: .
-        file: Dockerfile
+        file: appteste/Dockerfile
         push: false
         tags: |
-          renancoradini/denzelapp01:${{ github.sha }}
-          renancoradini/denzelapp01:${{ github.sha }}
+          renancoradini/apptestev4:${{ github.sha }}
+          renancoradini/apptestev4:${{ github.sha }}
            
 
     - name: Docker AWS ECR
@@ -27,6 +27,6 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
-        repo: ecrrepo2
+        repo: apptestv4
         tags: ${{ github.sha }}
-        dockerfile: Dockerfile
+        dockerfile: appteste/Dockerfile
