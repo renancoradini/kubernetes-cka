@@ -30,3 +30,4 @@ jobs:
         repo: apptestev4
         tags: ${{ github.sha }}
         dockerfile: apptest/Dockerfile
+        context: apptest/
