@@ -10,24 +10,25 @@ jobs:
     steps:
     - uses: actions/checkout@v3.6.0
  
-    - name: Construction of Docker's image
-      uses: docker/build-push-action@v4.1.1
-      with:
-        context: apptest/
-        file: apptest/Dockerfile
-        push: false
-        tags: |
-          renancoradini/apptestev4:latest
-          renancoradini/apptestev4:${{ github.sha }}
-           
 
-    - name: Docker AWS Build image and push to ECR
+    - name: Build Apptest - AWS Build image and push to ECR
       uses: appleboy/docker-ecr-action@v0.0.3
       with:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
         repo: apptestev4
-        tags: ${{ github.sha }}
+        tags: apptestev4:latest
         dockerfile: apptest/Dockerfile
         context: apptest/
+
+    - name: Build postgres - AWS Build image and push to ECR
+      uses: appleboy/docker-ecr-action@v0.0.3
+      with:
+        access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        region: us-west-2
+        repo: dbpost
+        tags: dbpost:latest
+        dockerfile: postgres/Dockerfile
+        context: postgres/
