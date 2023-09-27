@@ -21,7 +21,7 @@ jobs:
           renancoradini/apptestev4:${{ github.sha }}
            
 
-    - name: Docker AWS ECR
+    - name: Docker AWS Build image and push to ECR
       uses: appleboy/docker-ecr-action@v0.0.3
       with:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
