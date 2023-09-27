@@ -18,7 +18,7 @@ jobs:
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
         repo: apptestev4
-        tags: apptestev4:latest
+        tags: latest
         dockerfile: apptest/Dockerfile
         context: apptest/
 
@@ -29,6 +29,6 @@ jobs:
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
         repo: dbpost
-        tags: dbpost:latest
+        tags: latest
         dockerfile: postgres/Dockerfile
         context: postgres/

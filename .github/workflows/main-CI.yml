@@ -11,11 +11,11 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/job-docker-build-push.yml
 
-  CD-job2-call-job-aws-service-ecs-update:
-    needs: [CI-job1-call-docker-build-push]
-    permissions:
-        id-token: write
-        contents: read
-        pull-requests: write
-    secrets: inherit
-    uses: ./.github/workflows/job-aws-service-ecs-update.yml
+  # CD-job2-call-job-aws-service-ecs-update:
+  #   needs: [CI-job1-call-docker-build-push]
+  #   permissions:
+  #       id-token: write
+  #       contents: read
+  #       pull-requests: write
+  #   secrets: inherit
+  #   uses: ./.github/workflows/job-aws-service-ecs-update.yml
