@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: appteste
-        image: 595438810944.dkr.ecr.us-west-2.amazonaws.com/apptestev4:latest
+        image: 315431037525.dkr.ecr.us-west-2.amazonaws.com/apptestev4:latest
         resources:
           limits:
             memory: "384Mi"

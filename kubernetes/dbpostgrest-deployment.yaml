@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: dbpostgrest
-        image: 595438810944.dkr.ecr.us-west-2.amazonaws.com/dbpost:latest
+        image: 315431037525.dkr.ecr.us-west-2.amazonaws.com/dbpost:latest
         resources:
           limits:
             memory: "384Mi"
@@ -22,5 +22,5 @@ spec:
 
         ports:
         - containerPort: 5432
-        imagePullSecrets:
-        - name: regcred
+      imagePullSecrets:
+      - name: regcred
