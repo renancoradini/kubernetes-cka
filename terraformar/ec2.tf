@@ -41,11 +41,14 @@ resource "aws_lb_target_group_attachment" "kubernete_target_group" {
     for k, v in aws_instance.ec2_kubernetes_workers :
     v.id => v
   }
-  
+
   target_group_arn = aws_alb_target_group.alb_public_webservice_target_group.arn
   target_id        = each.value.id
   port             = 80
+  depends_on       = [aws_instance.ec2_kubernetes_workers]
 }
+
+
 
 resource "null_resource" "ansible-check-conn-ec2s" {
   provisioner "remote-exec" {
