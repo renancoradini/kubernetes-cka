@@ -14,10 +14,10 @@ jobs:
       uses: docker/build-push-action@v4.1.1
       with:
         context: .
-        file: appteste/Dockerfile
+        file: apptest/Dockerfile
         push: false
         tags: |
-          renancoradini/apptestev4:${{ github.sha }}
+          renancoradini/apptestev4:latest
           renancoradini/apptestev4:${{ github.sha }}
            
 
@@ -27,6 +27,6 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
-        repo: apptestv4
+        repo: apptestev4
         tags: ${{ github.sha }}
-        dockerfile: appteste/Dockerfile
+        dockerfile: apptest/Dockerfile
