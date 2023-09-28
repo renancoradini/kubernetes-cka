@@ -9,6 +9,7 @@ resource "local_file" "ansible_inventory" {
     ip_addrsm   = [for i in aws_instance.ec2_kubernetes_master : i.public_ip]
     ip_addrs    = [for i in aws_instance.ec2_kubernetes_workers : i.public_ip]
     ssh_keyfile = local_sensitive_file.private_key.filename
+    aws_account = var.aws_account
   })
   filename = format("%s/%s", abspath(path.root), "inventory.ini")
 }

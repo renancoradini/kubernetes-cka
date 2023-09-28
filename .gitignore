@@ -1,0 +1,5 @@
+terraformar/.ssh
+terraformar/*tfstate*
+terraformar/.terraform*
+*pem
+*.ini
