@@ -29,7 +29,7 @@ resource "aws_instance" "ec2_kubernetes_workers" {
   associate_public_ip_address = "true"
   # 2. Key Name
   # Specify the key name and it should match with key_name from the resource "aws_key_pair"
-  key_name = aws_key_pair.generated_key.key_name
+  key_name             = aws_key_pair.generated_key.key_name
   iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
   tags = {
     Name = "Kubernetes Workers"
@@ -49,9 +49,8 @@ resource "aws_lb_target_group_attachment" "kubernete_target_group" {
   target_id        = each.value.id
   port             = 80
   depends_on       = [aws_instance.ec2_kubernetes_workers]
+
 }
-
-
 
 resource "null_resource" "ansible-check-conn-ec2s" {
   provisioner "remote-exec" {
