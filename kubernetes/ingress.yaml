@@ -10,6 +10,6 @@ spec:
           - path: /
             backend:
               service:
-                name: appteste-service
+                name: appweb-service
                 port:
                   number: 80

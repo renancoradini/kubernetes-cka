@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dbpostgrest-deployment
+  name: database-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: dbpostgrest
+      app: database
   template:
     metadata:
       labels:
-        app: dbpostgrest
+        app: database
     spec:
       containers:
-      - name: dbpostgrest
-        image: 315431037525.dkr.ecr.us-west-2.amazonaws.com/dbpost:latest
+      - name: database
+        image: 315431037525.dkr.ecr.us-west-2.amazonaws.com/database:latest
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "384Mi"

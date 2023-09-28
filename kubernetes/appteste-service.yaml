@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: appteste-service
+  name: appweb-service
 spec:
   type: LoadBalancer
   selector:
-    app: appteste
+    app: appweb
   ports:
   - protocol: TCP
     port: 80

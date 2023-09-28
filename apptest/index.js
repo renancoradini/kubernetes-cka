@@ -5,7 +5,7 @@ const port = 80
 app.use(express.json());
 
 const sequelize = new Sequelize('postgres', 'user12345678', 'user12345678', {
-    host: 'dbpostgrest-service',
+    host: 'database-service',
     dialect: 'postgres'
   //  ssl: true
   });

@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: appteste-deployment
+  name: appweb-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: appteste
+      app: appweb
   template:
     metadata:
       labels:
-        app: appteste
+        app: appweb
     spec:
       containers:
-      - name: appteste
-        image: 549143892196.dkr.ecr.us-west-2.amazonaws.com/apptestev4:latest
+      - name: appweb
+        image: 549143892196.dkr.ecr.us-west-2.amazonaws.com/webapp:latest
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "384Mi"

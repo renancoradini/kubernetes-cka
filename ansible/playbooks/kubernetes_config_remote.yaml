@@ -5,8 +5,8 @@
   tasks:
   - name: Copy file 1
     ansible.builtin.copy:
-      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/appteste-deployment.yaml
-      dest: /home/ubuntu/appteste-deployment.yaml
+      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/appweb-deployment.yaml
+      dest: /home/ubuntu/appweb-deployment.yaml
      # remote_src: true
       owner: ubuntu
       group: ubuntu
@@ -14,24 +14,24 @@
 
   - name: Copy file 2
     ansible.builtin.copy:
-      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/appteste-service.yaml
-      dest: /home/ubuntu/appteste-service.yaml
+      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/appweb-service.yaml
+      dest: /home/ubuntu/appweb-service.yaml
       owner: ubuntu
       group: ubuntu
       mode: '0644'
 
   - name: Copy file 3
     ansible.builtin.copy:
-      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/dbpostgrest-deployment.yaml
-      dest: /home/ubuntu/dbpostgrest-deployment.yaml
+      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/database-deployment.yaml
+      dest: /home/ubuntu/database-deployment.yaml
       owner: ubuntu
       group: ubuntu
       mode: '0644'
 
   - name: Copy file 4
     ansible.builtin.copy:
-      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/dbpostgrest-service.yaml
-      dest: /home/ubuntu/dbpostgrest-service.yaml
+      src: /home/renancoradini/projetos/kubernetes-cka/kubernetes/database-service.yaml
+      dest: /home/ubuntu/database-service.yaml
       owner: ubuntu
       group: ubuntu
       mode: '0644'
@@ -51,10 +51,10 @@
   tasks:
     - name: Apply new settings
       shell: |
-            kubectl apply -f /home/ubuntu/appteste-deployment.yaml
-            kubectl apply -f /home/ubuntu/appteste-service.yaml
-            kubectl apply -f /home/ubuntu/dbpostgrest-deployment.yaml
-            kubectl apply -f /home/ubuntu/dbpostgrest-service.yaml
+            kubectl apply -f /home/ubuntu/appweb-deployment.yaml
+            kubectl apply -f /home/ubuntu/appweb-service.yaml
+            kubectl apply -f /home/ubuntu/database-deployment.yaml
+            kubectl apply -f /home/ubuntu/database-service.yaml
             kubectl apply -f /home/ubuntu/ingress.yaml
             apt install awscli -y
         
@@ -70,20 +70,17 @@
     - name: Verifying var 
       debug:
         msg: "{{dbaccount}} ee {{password}}"
-    - name: Verify the cluster is working
+    - name: Configure ECR Credentials to Kubernetes 
       shell: |
             kubectl delete secret regcred
             kubectl create secret docker-registry regcred \
             --docker-server={{ dbaccount }}.dkr.ecr.us-west-2.amazonaws.com \
             --docker-username=AWS \
             --docker-password=={{password}} \
-            --docker-email={{dbaccount}} \
+            --docker-email={{dbaccount}}
             
-    - name: Update image appteste
-      command: "kubectl set image deployment/appteste-deployment appteste={{dbaccount}}.dkr.ecr.us-west-2.amazonaws.com/apptestev4:latest"
+    - name: Update image appweb
+      command: "kubectl set image deployment/appweb-deployment appweb={{dbaccount}}.dkr.ecr.us-west-2.amazonaws.com/webapp:latest"
 
-    - name: Update image dbpost
-      command: "kubectl set image deployment/dbpostgrest-deployment dbpostgrest={{dbaccount}}.dkr.ecr.us-west-2.amazonaws.com/dbpost:latest"
-                                          
-
-                                          
+    - name: Update image database
+      command: "kubectl set image deployment/database-deployment database={{dbaccount}}.dkr.ecr.us-west-2.amazonaws.com/database:latest"

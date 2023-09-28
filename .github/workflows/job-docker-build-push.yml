@@ -17,7 +17,7 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
-        repo: apptestev4
+        repo: webapp
         tags: latest
         dockerfile: apptest/Dockerfile
         context: apptest/
@@ -28,7 +28,7 @@ jobs:
         access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: us-west-2
-        repo: dbpost
+        repo: database
         tags: latest
         dockerfile: postgres/Dockerfile
         context: postgres/

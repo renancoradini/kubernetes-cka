@@ -7,8 +7,8 @@ resource "aws_ecr_repository" "ecrdenzel" {
   }
 }
 
-resource "aws_ecr_repository" "apptestev4" {
-  name                 = "apptestev4"
+resource "aws_ecr_repository" "webapp" {
+  name                 = "webapp"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -16,8 +16,8 @@ resource "aws_ecr_repository" "apptestev4" {
   }
 }
 
-resource "aws_ecr_repository" "dbpost" {
-  name                 = "dbpost"
+resource "aws_ecr_repository" "database" {
+  name                 = "database"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
