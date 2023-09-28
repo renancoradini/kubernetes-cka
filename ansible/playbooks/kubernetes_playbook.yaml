@@ -4,6 +4,7 @@
   - aws_ec2_master
 
   gather_facts: true
+  become: true
   tasks:
   - name: Update the /etc/hosts file with node name
     tags: etchostsupdate

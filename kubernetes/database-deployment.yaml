@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: database
-        image: 315431037525.dkr.ecr.us-west-2.amazonaws.com/database:latest
+        image: 488811952251.dkr.ecr.us-west-2.amazonaws.com/database:latest
         imagePullPolicy: Always
         resources:
           limits:

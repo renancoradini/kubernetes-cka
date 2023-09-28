@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: appweb
-        image: 549143892196.dkr.ecr.us-west-2.amazonaws.com/webapp:latest
+        image: 488811952251.dkr.ecr.us-west-2.amazonaws.com/webapp:latest
         imagePullPolicy: Always
         resources:
           limits:
